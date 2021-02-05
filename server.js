@@ -3,6 +3,8 @@ const path = require("path");
 const PORT = process.env.PORT || 3001;
 const app = express();
 
+const auth_routes = require('./routes/user_routes');
+
 // Define middleware here
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -15,9 +17,15 @@ if (process.env.NODE_ENV === "production") {
 
 // Send every other request to the React app
 // Define any API routes before this runs
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "./client/build/index.html"));
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "./client/build/index.html"));
+// });
+
+app.get('/', (req, res) => {
+  res.json({ msg: "Working ...", user: newUser })
 });
+
+app.use('/api', auth_routes);
 
 app.listen(PORT, () => {
   console.log(`🌎 ==> API server now on port ${PORT}!`);
