@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/auth_controller');
+const isAuthorized = require('../utils/auth');
 
 router.get('/', (req, res) => {
     let newUser = {
@@ -18,6 +19,6 @@ router.post('/login', authController.login_post);
 router.get('/register', authController.register_get);
 router.post('/register', authController.register_post);
 
-router.get('/users', authController.users_get);
+router.get('/users', isAuthorized, authController.users_get);
 
 module.exports = router;

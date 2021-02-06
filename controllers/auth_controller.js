@@ -5,6 +5,14 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 module.exports.users_get = (req, res) => {
+
+    // console.log(req);
+    console.log(req.body);
+    // console.log(req.user);
+    console.log(req.headers);
+    // console.log(req.locals);
+
+    console.log(req.headers['x-auth-token']);
     res.json({ msg: "Hit Users Controller", view:"All Users"})
 }
 
