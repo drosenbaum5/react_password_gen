@@ -69,8 +69,34 @@ module.exports.register_post = async (req, res) => {
     }
 }
 
-module.exports.login_post = (req, res) => {
-    res.json({ msg: "Hit Login Controller (POST)", view: "Login"});
+module.exports.login_post = async (req, res) => {
+
+    try {
+        const { email, password, passCheck } = req.body;
+    
+        if(password !== passCheck) {
+            res.status(400).json({ msg: "Passwords do not match" });
+        }
+
+        // Search for Existing User
+        let user = await User.findOne({ email: email });
+        if(user) {
+            const authorized = await bcrypt.compare(password, user.password)
+            if(authorized) {
+                console.log("User Found");
+
+                const token = createToken(user._id);
+                // return user;
+                res.user = user;
+                res.header({ "x-auth-token": token, "Content-Type": "application/json" });
+                res.status(200).json({ msg: "Login Success", user: user , token: token});
+            }
+            throw Error("Invalid Credentials");
+        }
+        throw Error("Invalid Email");
+    } catch(err) {
+        res.status(400).json({ msg: "Not Authorized" });
+    }
 }
 
 // Function to Create a Token on every Register & Login POST
