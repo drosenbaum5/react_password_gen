@@ -29,6 +29,7 @@ class Register extends Component {
         }
 
         console.log(newUser);
+        // Send User Info to Backend Server
 
         // Reset Component State
         this.setState({ 
