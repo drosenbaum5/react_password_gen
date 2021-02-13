@@ -12,9 +12,9 @@ function App() {
       <div className="App">
         <Navbar />
         <Switch>
-          <Route path='/register' component={Register}>Register</Route>
-          <Route path='/login' component={Login}>Login</Route>
-          <Route path='/' component={Dashboard}>Home</Route>
+          <Route path='/register' component={Register} />
+          <Route path='/login' component={Login} />
+          <Route path='/' component={Dashboard} />
         </Switch>
       </div>
     </BrowserRouter>
