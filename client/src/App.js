@@ -1,18 +1,23 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
+import { BrowserRouter, Route, Link, Switch } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Register from './components/auth/Register';
+import Login from './components/auth/Login';
+import Dashboard from './components/Dashboard';
 import "./App.css";
 
 function App() {
   return (
-    <div className="App">
-      <div className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h2>Welcome to React</h2>
+    <BrowserRouter>
+      <div className="App">
+        <Navbar />
+        <Switch>
+          <Route path='/register' component={Register}>Register</Route>
+          <Route path='/login' component={Login}>Login</Route>
+          <Route path='/' component={Dashboard}>Home</Route>
+        </Switch>
       </div>
-      <p className="App-intro">
-        To get started, edit <code>src/App.js</code> and save to reload.
-      </p>
-    </div>
+    </BrowserRouter>
   );
 }
 
