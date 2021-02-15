@@ -5,7 +5,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 module.exports.users_get = (req, res) => {
-
     // console.log(req);
     console.log(req.body);
     // console.log(req.user);
@@ -25,7 +24,7 @@ module.exports.login_get = (req, res) => {
 }
 
 module.exports.register_post = async (req, res) => {
-    // console.log(req.body);
+    console.log("In Register Route...");
     try {
         // Deconstruct the Form Inputs
         const { username, email, password, passwordCheck } = req.body;
@@ -78,7 +77,6 @@ module.exports.register_post = async (req, res) => {
 }
 
 module.exports.login_post = async (req, res) => {
-
     try {
         const { email, password, passCheck } = req.body;
     
@@ -112,4 +110,25 @@ const createToken = (id) => {
     // Return the TOKEN to the calling function
     return jwt.sign({ id: id }, process.env.TOKEN_SECRET, { expiresIn: 86400 });
 }
+
+
+module.exports.validate = async (req, res) => {
+    console.log('validating token ...')
+    try {
+        const token = req.header('x-auth-token');
+        console.log(`Token: ${token}`);
+        if(!token) return res.json(false);
+
+        const verified = jwt.verify(token, process.env.TOKEN_SECRET)
+        if(!verified) return res.json(false);
+
+        const user = await User.findById(verified.id);
+        if(!user) return res.json(false);
+
+        return res.json(true);
+    } catch(err) {
+        console.log(err)
+        res.status(403).json({ error: err.message });
+    }
+} 
 

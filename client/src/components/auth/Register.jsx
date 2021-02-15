@@ -1,24 +1,37 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
+import Axios from 'axios';
 
-class Register extends Component {
+// class Register extends Component {
+function Register() {
 
-    state = {
+    // Set State Hooks
+    const [values , setValues] = useState({
         first: '',
         last: '',
         username: '',
         email: '',
         password: '',
         confirm: ''
+    });
+
+    // state = {
+    //     first: '',
+    //     last: '',
+    //     username: '',
+    //     email: '',
+    //     password: '',
+    //     confirm: ''
+    // }
+
+    const handleChange = (evt) => {
+        setValues({...values, [evt.currentTarget.name]: evt.currentTarget.value })
+        // this.setState({ [evt.currentTarget.name]: evt.currentTarget.value })
     }
 
-    handleChange = (evt) => {
-        this.setState({ [evt.currentTarget.name]: evt.currentTarget.value })
-    }
-
-    handleSubmit = (evt) => {
+    const handleSubmit = async (evt) => {
         evt.preventDefault();
-        const { first, last, username, email, password } = this.state
+        const { first, last, username, email, password } = values
         // Temp User Obj
         let newUser = {
             first: first,
@@ -30,9 +43,11 @@ class Register extends Component {
 
         console.log(newUser);
         // Send User Info to Backend Server
+        let user = await Axios.post('http://localhost:3001/api/register', newUser)
+        console.log(`User: ${user}`);
 
         // Reset Component State
-        this.setState({ 
+        setValues({ 
             first: '',
             last: '',
             username: '',
@@ -42,21 +57,21 @@ class Register extends Component {
         });
     }
 
-    render() {
+    // render() {
         return (
             <>
             <Container className="register">
                 <div>
                     <h1>Register Component</h1>
                 </div>
-                <Form onSubmit={this.handleSubmit}>
+                <Form onSubmit={handleSubmit}>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>First Name</Form.Label>
                         <Form.Control 
                             type="text"
                             name="first"
-                            value={this.state.first}
-                            onChange={this.handleChange}
+                            value={values.first}
+                            onChange={handleChange}
                             placeholder="Enter First Name" 
                         />
                     </Form.Group>
@@ -67,8 +82,8 @@ class Register extends Component {
                             type="text" 
                             placeholder="Enter Last Name"
                             name="last"
-                            value={this.state.last}
-                            onChange={this.handleChange} />
+                            value={values.last}
+                            onChange={handleChange} />
                     </Form.Group>
 
                     <Form.Group controlId="formBasicEmail">
@@ -77,8 +92,8 @@ class Register extends Component {
                             type="text" 
                             placeholder="Enter Username"
                             name="username"
-                            value={this.state.username}
-                            onChange={this.handleChange} />
+                            value={values.username}
+                            onChange={handleChange} />
                     </Form.Group>
 
                     <Form.Group controlId="formBasicEmail">
@@ -87,8 +102,8 @@ class Register extends Component {
                             type="email" 
                             placeholder="Enter email"
                             name="email"
-                            value={this.state.email}
-                            onChange={this.handleChange} />
+                            value={values.email}
+                            onChange={handleChange} />
                         <Form.Text className="text-muted">
                         We'll never share your email with anyone else.
                         </Form.Text>
@@ -100,8 +115,8 @@ class Register extends Component {
                             type="password" 
                             placeholder="Password"
                             name="password"
-                            value={this.state.password}
-                            onChange={this.handleChange} />
+                            value={values.password}
+                            onChange={handleChange} />
                     </Form.Group>
 
                     <Form.Group controlId="formBasicPassword">
@@ -110,8 +125,8 @@ class Register extends Component {
                             type="password" 
                             placeholder="Confirm"
                             name="confirm"
-                            value={this.state.confirm}
-                            onChange={this.handleChange} />
+                            value={values.confirm}
+                            onChange={handleChange} />
                     </Form.Group>
 
                     <Button variant="primary" type="submit" className="mt-3">
@@ -121,7 +136,7 @@ class Register extends Component {
             </Container>
             </>
         )
-    }
+    // }
 }
 
 

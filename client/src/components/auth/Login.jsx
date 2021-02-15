@@ -1,53 +1,71 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 
-class Login extends Component {
-    state = {
+// class Login extends Component {
+function Login() {
+    
+    const [user, setUser] = useState({
         email: '',
         password: '',
         confirm: ''
+    });
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirm, setConfirm] = useState('');
+    // state = {
+    //     email: '',
+    //     password: '',
+    //     confirm: ''
+    // }
+
+    const handleChange = (evt) => {
+        // this.setState({ [evt.currentTarget.name]: evt.currentTarget.value })
+        setUser({...user, [evt.currentTarget.name]: evt.currentTarget.value });
     }
 
-    handleChange = (evt) => {
-        this.setState({ [evt.currentTarget.name]: evt.currentTarget.value })
-    }
-
-    handleSubmit = (evt) => {
+    const handleSubmit = (evt) => {
         evt.preventDefault();
-        const { email, password } = this.state
+        // const { email, password } = this.state
+        const { email, password } = user
         // Temp User Obj
-        let user = {
+        let currentUser = {
             email: email,
             password: password
         }
 
-        console.log(user);
+        console.log(currentUser);
         // Send User Info to Backend Server
-
+        
         // Reset Component State
-        this.setState({ 
+        setUser({ 
             email: '',
             password: '',
             confirm: ''
         });
+        // this.setState({ 
+        //     email: '',
+        //     password: '',
+        //     confirm: ''
+        // });
     }
 
-    render() {
+    // render() {
         return (
             <>
             <Container className="login">
                 <div>
                     <h1>Login Component</h1>
                 </div>
-                <Form onSubmit={this.handleSubmit}>
+                <Form onSubmit={handleSubmit}>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Email address</Form.Label>
                         <Form.Control 
                             type="email" 
                             placeholder="Enter email"
                             name="email"
-                            value={this.state.email}
-                            onChange={this.handleChange} />
+                            value={user.email}
+                            onChange={handleChange} />
                     </Form.Group>
 
                     <Form.Group controlId="formBasicPassword">
@@ -56,8 +74,8 @@ class Login extends Component {
                             type="password" 
                             placeholder="Password"
                             name="password"
-                            value={this.state.password}
-                            onChange={this.handleChange} />
+                            value={user.password}
+                            onChange={handleChange} />
                     </Form.Group>
 
                     <Form.Group controlId="formBasicPassword">
@@ -66,8 +84,8 @@ class Login extends Component {
                             type="password" 
                             placeholder="Confirm"
                             name="confirm"
-                            value={this.state.confirm}
-                            onChange={this.handleChange} />
+                            value={user.confirm}
+                            onChange={handleChange} />
                     </Form.Group>
 
                     <Button variant="primary" type="submit" className="mt-3">
@@ -77,7 +95,7 @@ class Login extends Component {
             </Container>
             </>
         )
-    }
+    // }
 }
 
 
