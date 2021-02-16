@@ -19,6 +19,7 @@ router.post('/login', authController.login_post);
 router.get('/register', authController.register_get);
 router.post('/register', authController.register_post);
 
-router.get('/users', isAuthorized, authController.users_get);
+router.get('/validate-token', authController.validate);
 
+router.get('/users', isAuthorized, authController.users_get);
 module.exports = router;
