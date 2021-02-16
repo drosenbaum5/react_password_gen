@@ -6,8 +6,6 @@ const app = express();
 
 const auth_routes = require('./routes/user_routes');
 
-
-// Define middleware here
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // Serve up static assets (usually on heroku)
