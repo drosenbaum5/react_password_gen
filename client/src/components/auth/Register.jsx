@@ -29,10 +29,15 @@ function Register() {
             email: email,
             password: password
         }
-
+        let data = JSON.stringify(newUser);
+        let config = { 
+                headers: { 
+                    "Content-Type": "application/json"
+                }
+            }
         console.log(newUser);
         // Send User Info to Backend Server
-        let user = await Axios.post('http://localhost:3001/api/register', newUser)
+        let user = await Axios.post('/api/register', data, config);
         console.log(`User: ${user}`);
 
         // Reset Component State

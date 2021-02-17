@@ -1,8 +1,11 @@
 import React, { Component, useState } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
+import { Redirect, useHistory } from 'react-router-dom';
+import Axios from 'axios';
 
-function Login() {
+function Login(props) {
     
+    const history = useHistory();
     const [user, setUser] = useState({
         email: '',
         password: '',
@@ -13,24 +16,44 @@ function Login() {
         setUser({...user, [evt.currentTarget.name]: evt.currentTarget.value });
     }
 
-    const handleSubmit = (evt) => {
+    const handleSubmit = async (evt) => {
         evt.preventDefault();
-        const { email, password } = user
+        const { email, password, confirm } = user
         // Temp User Obj
         let currentUser = {
             email: email,
-            password: password
+            password: password,
+            confirm: confirm
         }
 
         console.log(currentUser);
+        let data = JSON.stringify(currentUser);
+        let config = {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
         // Send User Info to Backend Server
-        
+        let userRes = await Axios.post('/api/login', data, config)
+
+        console.log(userRes);
+
+        // Set Token in Local Storage
+        let token = userRes.data.token;
+        if(!token) {
+            localStorage.setItem('auth-token', '');
+        } else {
+            localStorage.setItem('auth-token', token);
+        }
+
         // Reset Component State
         setUser({ 
             email: '',
             password: '',
             confirm: ''
         });
+
+        history.push("/");
     }
 
     return (
