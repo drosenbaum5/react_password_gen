@@ -1,9 +1,10 @@
 import React, { Component, useState } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
 import Axios from 'axios';
 
 function Register() {
-
+    const history = useHistory();
     // Set State Hooks
     const [values , setValues] = useState({
         first: '',
@@ -20,14 +21,15 @@ function Register() {
 
     const handleSubmit = async (evt) => {
         evt.preventDefault();
-        const { first, last, username, email, password } = values
+        const { first, last, username, email, password, confirm } = values
         // Temp User Obj
         let newUser = {
             first: first,
             last: last,
             username: username,
             email: email,
-            password: password
+            password: password,
+            confirm: confirm
         }
         let data = JSON.stringify(newUser);
         let config = { 
@@ -38,7 +40,25 @@ function Register() {
         console.log(newUser);
         // Send User Info to Backend Server
         let user = await Axios.post('/api/register', data, config);
-        console.log(`User: ${user}`);
+        console.log(user);
+        // Set Token in Local Storage
+        let token = user.data.token;
+        if(!token) {
+            localStorage.setItem('auth-token', '');
+        } else {
+            localStorage.setItem('auth-token', token);
+        }
+
+        // Axios({
+        //     url: '/api/register',
+        //     method: "POST",
+        //     headers: { "Content-Type": "application/json"},
+        //     data: data
+        // }).then(response => {
+        //     console.log("Return from DB")
+        //     console.log(response);
+        // })
+        //   .catch(err => console.log(err));
 
         // Reset Component State
         setValues({ 
@@ -49,6 +69,8 @@ function Register() {
             password: '',
             confirm: ''
         });
+
+        history.push("/");
     }
 
     return (

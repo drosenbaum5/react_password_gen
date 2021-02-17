@@ -13,7 +13,7 @@ module.exports.users_get = async (req, res) => {
 
     // console.log(req.headers['x-auth-token']);
     let users = await User.find({});
-    console.log(users);
+    // console.log(users);
     return res.json({ msg: "Hit Users Controller", view:"All Users", allUsers: users})
 }
 
@@ -27,6 +27,7 @@ module.exports.login_get = (req, res) => {
 
 module.exports.register_post = async (req, res) => {
     console.log("In Register Route...");
+    console.log(req.body);
     try {
         // Deconstruct the Form Inputs
         const { first, last, username, email, password, confirm } = req.body;
@@ -46,6 +47,7 @@ module.exports.register_post = async (req, res) => {
 
         // User Email already exists in database (?)
         const currentUser = await User.findOne({ email: email });
+        console.log(`Current User - ${currentUser}`)
         if(currentUser) {
             return res.status(400).json({ msg: "A User with that email already exists"});
         }

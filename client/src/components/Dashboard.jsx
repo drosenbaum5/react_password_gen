@@ -9,7 +9,7 @@ class Dashboard extends Component {
 
     componentDidMount() {
         axios.get("/api/users").then(data => {
-            console.log(data.data.allUsers);
+            // console.log(data.data.allUsers);
             this.setState({ users: data.data.allUsers })
         });
     }
@@ -19,15 +19,15 @@ class Dashboard extends Component {
         return (
             <div>
                 <h1>Dashboard Component</h1>
-                <p>{this.state.users.map(user => {
+                {this.state.users.map(user => {
                     return (
-                        <>
-                        <p>{user.first}</p>
-                        <p>{user.last}</p>
-                        <p>{user.username}</p>
-                        <p>{user.email}</p>
-                        </>
-                    )})}</p>
+                        <div className={user.id} key={user._id} >
+                            <p>{user.first}</p>
+                            <p>{user.last}</p>
+                            <p>{user.username}</p>
+                            <p>{user.email}</p>
+                        </div>
+                    )})}
             </div>
         )
     }
