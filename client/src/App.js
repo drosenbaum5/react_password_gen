@@ -16,13 +16,14 @@ function App() {
 
   useEffect(() => {
     const isLoggedIn = async () => {
-      const token = localStorage.getItem('auth-token');
+      console.log("Running isLoggedIn() Method...")
+      let token = localStorage.getItem('auth-token');
       if(!token) {
         localStorage.setItem('auth-token', '');
         token = '';
       }
       // Send Request to Backend
-      let tokenRes = await Axios.post('/validate-token', null, 
+      let tokenRes = await Axios.get('/api/validate-token', 
         { 
           headers: {
             "x-auth-token": token
@@ -30,8 +31,8 @@ function App() {
       });
 
       console.log(tokenRes.data);
-      if(!tokenRes.data) {
-        const userRes = await Axios.get('/users', { headers: { "x-auth-token": token } });
+      if(tokenRes.data) {
+        const userRes = await Axios.get('/api/user', { headers: { "x-auth-token": token } });
         setUserData({
           token, 
           user: userRes.data
@@ -39,6 +40,7 @@ function App() {
       }
 
     }
+    isLoggedIn();
   }, []);
 
   return (

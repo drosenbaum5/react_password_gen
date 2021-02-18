@@ -17,6 +17,18 @@ module.exports.users_get = async (req, res) => {
     return res.json({ msg: "Hit Users Controller", view:"All Users", allUsers: users})
 }
 
+module.exports.user_get = async (req, res) => {
+    // console.log(req.user);
+    console.log(res.user);
+    try {
+        let user = await User.findById(res.user)
+        console.log(user);
+        res.json({ data: user })
+    } catch(err) {
+        console.log(err);
+    }
+}
+
 module.exports.register_get = (req, res) => {
     res.json({ msg: "Hit Register Controller", view: "Register"});
 }
@@ -120,6 +132,7 @@ const createToken = (id) => {
 
 module.exports.validate = async (req, res) => {
     console.log('validating token ...')
+    // console.log(req);
     try {
         const token = req.header('x-auth-token');
         console.log(`Token: ${token}`);

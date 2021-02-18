@@ -49,17 +49,6 @@ function Register() {
             localStorage.setItem('auth-token', token);
         }
 
-        // Axios({
-        //     url: '/api/register',
-        //     method: "POST",
-        //     headers: { "Content-Type": "application/json"},
-        //     data: data
-        // }).then(response => {
-        //     console.log("Return from DB")
-        //     console.log(response);
-        // })
-        //   .catch(err => console.log(err));
-
         // Reset Component State
         setValues({ 
             first: '',
@@ -70,6 +59,7 @@ function Register() {
             confirm: ''
         });
 
+        // --> Redirect to Dashboard
         history.push("/");
     }
 
