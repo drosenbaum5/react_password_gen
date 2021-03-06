@@ -1,36 +1,28 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect, useContext } from 'react';
+import UserContext from '../context/userContext';
 import axios from 'axios';
 
-class Dashboard extends Component {
+// class Dashboard extends Component {
+const Dashboard = () => {
 
-    state = {
-        users: []
-    }
+    const [users, setUsers] = useState([]);
+    const { userData, setUser } = useContext(UserContext);
+    console.log(userData);
+    // console.log(token);
 
-    componentDidMount() {
-        axios.get("/api/users").then(data => {
-            // console.log(data.data.allUsers);
-            this.setState({ users: data.data.allUsers })
-        });
-    }
+    useEffect(() => {
+        // axios.get("/api/users", { headers: { 'x-auth-token': userData.token }}).then(data => {
+        //     console.log(data.data.allUsers);
+        //     setUsers({ users: data.data.allUsers })
+        // });
+    }, []);
 
+    return (
+        <div>
+            <h1>Dashboard Component</h1>
 
-    render() {
-        return (
-            <div>
-                <h1>Dashboard Component</h1>
-                {this.state.users.map(user => {
-                    return (
-                        <div className={user.id} key={user._id} >
-                            <p>{user.first}</p>
-                            <p>{user.last}</p>
-                            <p>{user.username}</p>
-                            <p>{user.email}</p>
-                        </div>
-                    )})}
-            </div>
-        )
-    }
+        </div>
+    )
 }
 
 export default Dashboard;

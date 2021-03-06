@@ -17,9 +17,9 @@ function App() {
   useEffect(() => {
     const isLoggedIn = async () => {
       console.log("Running isLoggedIn() Method...")
-      let token = localStorage.getItem('auth-token');
+      let token = localStorage.getItem('x-auth-token');
       if(!token) {
-        localStorage.setItem('auth-token', '');
+        localStorage.setItem('x-auth-token', '');
         token = '';
       }
       // Send Request to Backend
@@ -33,6 +33,7 @@ function App() {
       console.log(tokenRes.data);
       if(tokenRes.data) {
         const userRes = await Axios.get('/api/user', { headers: { "x-auth-token": token } });
+        // Update User State
         setUserData({
           token, 
           user: userRes.data

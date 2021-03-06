@@ -13,7 +13,7 @@ module.exports.users_get = async (req, res) => {
 
     // console.log(req.headers['x-auth-token']);
     let users = await User.find({});
-    // console.log(users);
+    console.log(users);
     return res.json({ msg: "Hit Users Controller", view:"All Users", allUsers: users})
 }
 
@@ -77,17 +77,19 @@ module.exports.register_post = async (req, res) => {
             email: email,
             password: passHash
         }
-        console.log(newUser);
+        // console.log(newUser);
         // Create User in Database
         const user = await User.create(newUser);
 
         // Request Token (Pass in User ID#)
         const token = createToken(user._id);
-        console.log(token);
+        // console.log(token);
+
+        res.cookie("token", token, { httpOnly: true }).send();
 
         // --> Response to Frontend
-        res.header({ "x-auth-token": token, "Content-Type": "application/json" });
-        return res.status(201).json({ msg: "New User Created", user: user , token: token });
+        // res.header({ "x-auth-token": token, "Content-Type": "application/json" });
+        // return res.status(201).json({ msg: "New User Created", user: user , token: token });
     } catch(err) {
         console.log(err);
         res.status(400).json({ msg: "User not created" });

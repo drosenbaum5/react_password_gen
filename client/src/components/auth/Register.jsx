@@ -44,9 +44,9 @@ function Register() {
         // Set Token in Local Storage
         let token = user.data.token;
         if(!token) {
-            localStorage.setItem('auth-token', '');
+            localStorage.setItem('x-auth-token', '');
         } else {
-            localStorage.setItem('auth-token', token);
+            localStorage.setItem('x-auth-token', token);
         }
 
         // Reset Component State

@@ -3,7 +3,9 @@ const jwt = require('jsonwebtoken');
 const isAuthorized = (req, res, next) => {
     console.log("Running Authorization");
     // Capture Token
-    const token = req.header('x-auth-token');
+    // console.log(req)
+    console.log(req.headers('x-auth-token'))
+    const token = req.headers('x-auth-token');
     console.log(token);
     // const token = req.headers.token;
     if(!token) {
