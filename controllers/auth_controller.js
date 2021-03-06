@@ -114,8 +114,10 @@ module.exports.login_post = async (req, res) => {
                 const token = createToken(user._id);
                 // return user;
                 res.user = user;
-                res.header({ "x-auth-token": token, "Content-Type": "application/json" });
-                return res.status(200).json({ msg: "Login Success", user: user , token: token});
+
+                res.cookie("token", token, { httpOnly: true }).send();
+                // res.header({ "x-auth-token": token, "Content-Type": "application/json" });
+                // return res.status(200).json({ msg: "Login Success", user: user , token: token});
             }
             throw Error("Invalid Credentials");
         }
@@ -123,6 +125,15 @@ module.exports.login_post = async (req, res) => {
     } catch(err) {
         res.status(400).json({ msg: "Not Authorized" });
     }
+}
+
+module.exports.logout = (req, res) => {
+    console.log("Logging out...");
+    // Clear Token from Cookie to log User OUT
+    res.cookie("token", "", { 
+        httpOnly: true,
+        expiresIn: new Date(0)
+    }).send();
 }
 
 // Function to Create a Token on every Register & Login POST
