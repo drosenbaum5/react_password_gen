@@ -1,8 +1,14 @@
-import React, { Component, useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
+import AuthContext from '../../context/userContext';
+import axios from 'axios';
 import { Container, Form, Button } from 'react-bootstrap';
 
-function Login() {
+function Login(props) {
     
+    const history = useHistory();
+    const { getLoggedIn } = useContext(AuthContext);
+
     const [user, setUser] = useState({
         email: '',
         password: '',
@@ -13,24 +19,35 @@ function Login() {
         setUser({...user, [evt.currentTarget.name]: evt.currentTarget.value });
     }
 
-    const handleSubmit = (evt) => {
+    const handleSubmit = async (evt) => {
         evt.preventDefault();
-        const { email, password } = user
+        const { email, password, confirm } = user
         // Temp User Obj
         let currentUser = {
             email: email,
-            password: password
+            password: password,
+            confirm: confirm
         }
 
         console.log(currentUser);
+        let data = JSON.stringify(currentUser);
+        let config = {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            withCredentials: true
+        }
         // Send User Info to Backend Server
-        
+        await axios.post('/api/login', data, config)
+        await getLoggedIn();
         // Reset Component State
         setUser({ 
             email: '',
             password: '',
             confirm: ''
         });
+
+        history.push("/");
     }
 
     return (

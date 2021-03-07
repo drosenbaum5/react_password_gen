@@ -1,11 +1,14 @@
-import React, { Component, useState } from 'react';
+import React, { useState, useContext } from 'react';
+import AuthContext from '../../context/userContext';
+import { useHistory } from 'react-router-dom';
 import { Container, Form, Button } from 'react-bootstrap';
 import Axios from 'axios';
 
 function Register() {
-
+    const history = useHistory();
+    const { getLoggedIn } = useContext(AuthContext);
     // Set State Hooks
-    const [values , setValues] = useState({
+    const [values, setValues] = useState({
         first: '',
         last: '',
         username: '',
@@ -20,21 +23,28 @@ function Register() {
 
     const handleSubmit = async (evt) => {
         evt.preventDefault();
-        const { first, last, username, email, password } = values
+        const { first, last, username, email, password, confirm } = values
         // Temp User Obj
         let newUser = {
             first: first,
             last: last,
             username: username,
             email: email,
-            password: password
+            password: password,
+            confirm: confirm
         }
-
+        let data = JSON.stringify(newUser);
+        let config = { 
+                headers: { 
+                    "Content-Type": "application/json"
+                },
+                withCredentials: true
+            }
         console.log(newUser);
         // Send User Info to Backend Server
-        let user = await Axios.post('http://localhost:3001/api/register', newUser)
-        console.log(`User: ${user}`);
-
+        let user = await Axios.post('/api/register', data, config);
+        console.log(user);
+        await getLoggedIn();
         // Reset Component State
         setValues({ 
             first: '',
@@ -44,6 +54,9 @@ function Register() {
             password: '',
             confirm: ''
         });
+
+        // --> Redirect to Dashboard
+        history.push("/");
     }
 
     return (

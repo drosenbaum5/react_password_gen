@@ -1,7 +1,9 @@
 const express = require("express");
 const path = require("path");
+const cors = require('cors');
 const PORT = process.env.PORT || 3001;
-require('dotenv').config()
+require('dotenv').config();
+const cookieParser = require('cookie-parser');
 const app = express();
 
 const auth_routes = require('./routes/user_routes');
@@ -12,6 +14,9 @@ app.use(express.json());
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
+
+app.use(cors());
+app.use(cookieParser());
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/password_gen', { 
