@@ -4,8 +4,9 @@ const isAuthorized = (req, res, next) => {
     console.log("Running Authorization");
     // Capture Token
     // console.log(req)
-    console.log(req.headers('x-auth-token'))
-    const token = req.headers('x-auth-token');
+    // console.log(req.headers('x-auth-token'))
+    // const token = req.headers('x-auth-token');
+    const token = req.cookies.token;
     console.log(token);
     // const token = req.headers.token;
     if(!token) {

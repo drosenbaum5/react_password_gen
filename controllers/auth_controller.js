@@ -11,9 +11,9 @@ module.exports.users_get = async (req, res) => {
     // console.log(req.headers);
     // console.log(req.locals);
 
-    // console.log(req.headers['x-auth-token']);
     let users = await User.find({});
     console.log(users);
+
     return res.json({ msg: "Hit Users Controller", view:"All Users", allUsers: users})
 }
 
@@ -78,6 +78,7 @@ module.exports.register_post = async (req, res) => {
             password: passHash
         }
         // console.log(newUser);
+
         // Create User in Database
         const user = await User.create(newUser);
 
@@ -85,11 +86,8 @@ module.exports.register_post = async (req, res) => {
         const token = createToken(user._id);
         // console.log(token);
 
-        res.cookie("token", token, { httpOnly: true }).send();
-
         // --> Response to Frontend
-        // res.header({ "x-auth-token": token, "Content-Type": "application/json" });
-        // return res.status(201).json({ msg: "New User Created", user: user , token: token });
+        res.cookie("token", token, { httpOnly: true }).send();
     } catch(err) {
         console.log(err);
         res.status(400).json({ msg: "User not created" });
@@ -116,8 +114,6 @@ module.exports.login_post = async (req, res) => {
                 res.user = user;
 
                 res.cookie("token", token, { httpOnly: true }).send();
-                // res.header({ "x-auth-token": token, "Content-Type": "application/json" });
-                // return res.status(200).json({ msg: "Login Success", user: user , token: token});
             }
             throw Error("Invalid Credentials");
         }
@@ -147,15 +143,16 @@ module.exports.validate = async (req, res) => {
     console.log('validating token ...')
     // console.log(req);
     try {
-        const token = req.header('x-auth-token');
+        const token = req.cookies.token;
         console.log(`Token: ${token}`);
         if(!token) return res.json(false);
 
         const verified = jwt.verify(token, process.env.TOKEN_SECRET)
         if(!verified) return res.json(false);
-
+        console.log(verified);
         const user = await User.findById(verified.id);
         if(!user) return res.json(false);
+        console.log(user);
 
         return res.json(true);
     } catch(err) {

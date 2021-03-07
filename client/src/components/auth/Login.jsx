@@ -1,11 +1,14 @@
-import React, { Component, useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
+import AuthContext from '../../context/userContext';
+import axios from 'axios';
 import { Container, Form, Button } from 'react-bootstrap';
-import { Redirect, useHistory } from 'react-router-dom';
-import Axios from 'axios';
 
 function Login(props) {
     
     const history = useHistory();
+    const { getLoggedIn } = useContext(AuthContext);
+
     const [user, setUser] = useState({
         email: '',
         password: '',
@@ -31,21 +34,12 @@ function Login(props) {
         let config = {
             headers: {
                 "Content-Type": "application/json"
-            }
+            },
+            withCredentials: true
         }
         // Send User Info to Backend Server
-        let userRes = await Axios.post('/api/login', data, config)
-
-        console.log(userRes);
-
-        // Set Token in Local Storage
-        let token = userRes.data.token;
-        if(!token) {
-            localStorage.setItem('x-auth-token', '');
-        } else {
-            localStorage.setItem('x-auth-token', token);
-        }
-
+        await axios.post('/api/login', data, config)
+        await getLoggedIn();
         // Reset Component State
         setUser({ 
             email: '',

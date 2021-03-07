@@ -1,26 +1,32 @@
 import React, { Component, useState, useEffect, useContext } from 'react';
-import UserContext from '../context/userContext';
+import AuthContext from '../context/userContext';
 import axios from 'axios';
 
 // class Dashboard extends Component {
 const Dashboard = () => {
 
     const [users, setUsers] = useState([]);
-    const { userData, setUser } = useContext(UserContext);
-    console.log(userData);
-    // console.log(token);
+    const [loggedIn, setLoggedIn] = useState();
 
     useEffect(() => {
-        // axios.get("/api/users", { headers: { 'x-auth-token': userData.token }}).then(data => {
-        //     console.log(data.data.allUsers);
-        //     setUsers({ users: data.data.allUsers })
-        // });
+        isAuth();
     }, []);
+
+    async function isAuth() {
+        let authorized = await axios.get('/api/validate-token');
+        console.log(`Dashboard Authorized: ${authorized.data}`);
+        console.log(authorized);
+        setLoggedIn(authorized.data);
+    }
 
     return (
         <div>
-            <h1>Dashboard Component</h1>
-
+            {loggedIn === true && (
+                <h1>Dashboard Component - Authorized</h1>
+            )}
+            {loggedIn === false && (
+                <h1>Dashboard Component - Unauthorized</h1>
+            )}
         </div>
     )
 }

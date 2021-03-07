@@ -1,12 +1,14 @@
-import React, { Component, useState } from 'react';
-import { Container, Form, Button } from 'react-bootstrap';
+import React, { useState, useContext } from 'react';
+import AuthContext from '../../context/userContext';
 import { useHistory } from 'react-router-dom';
+import { Container, Form, Button } from 'react-bootstrap';
 import Axios from 'axios';
 
 function Register() {
     const history = useHistory();
+    const { getLoggedIn } = useContext(AuthContext);
     // Set State Hooks
-    const [values , setValues] = useState({
+    const [values, setValues] = useState({
         first: '',
         last: '',
         username: '',
@@ -35,20 +37,14 @@ function Register() {
         let config = { 
                 headers: { 
                     "Content-Type": "application/json"
-                }
+                },
+                withCredentials: true
             }
         console.log(newUser);
         // Send User Info to Backend Server
         let user = await Axios.post('/api/register', data, config);
         console.log(user);
-        // Set Token in Local Storage
-        let token = user.data.token;
-        if(!token) {
-            localStorage.setItem('x-auth-token', '');
-        } else {
-            localStorage.setItem('x-auth-token', token);
-        }
-
+        await getLoggedIn();
         // Reset Component State
         setValues({ 
             first: '',
